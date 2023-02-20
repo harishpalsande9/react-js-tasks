@@ -1,23 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Task1 from "./Task1";
+import Task2 from "./Task2";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [list, setList] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asending");
+  const [abc, setAbc] = useState([]);
+  useEffect(() => {
+    getList();
+  }, []);
+
+  const getList = async () => {
+    let data = await fetch("https://jsonplaceholder.typicode.com/users");
+    let responseData = await data.json();
+    console.log(responseData);
+    setAbc(responseData);
+    setList(responseData);
+  };
+
+  const sortList = async () => {
+    if (sortOrder === "asending") {
+      let data = [...list].sort((a, b) =>
+        a.name.length > b.name.length ? 1 : -1
+      );
+      setList(data);
+      setSortOrder("decending");
+    }
+
+    if (sortOrder === "decending") {
+      let data = [...list].sort((a, b) =>
+        a.name.length < b.name.length ? 1 : -1
+      );
+      setList(data);
+      setSortOrder("default");
+    }
+    if (sortOrder === "default") {
+      setList(abc);
+      setSortOrder("asending");
+    }
+  };
+
+  const [name, setName] = useState("");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>sdf</h1>
+      <button onClick={sortList}>sort</button>
+      <ul>{list ? list.map((ele, index) => <li> {ele.name}</li>) : ""}</ul>
     </div>
   );
 }
