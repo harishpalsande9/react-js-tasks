@@ -3,6 +3,7 @@ import "./App.css";
 import Task1 from "./Task1";
 import Task2 from "./Task2";
 import { useEffect, useState } from "react";
+import SearchFilter from "./SearchFilter";
 
 function App() {
   const [list, setList] = useState([]);
@@ -48,7 +49,32 @@ function App() {
     <div>
       <h1>sdf</h1>
       <button onClick={sortList}>sort</button>
-      <ul>{list ? list.map((ele, index) => <li> {ele.name}</li>) : ""}</ul>
+      <input
+        placeholder="search.."
+        type="text"
+        onChange={(e) => setName(e.target.value)}
+      />
+      <ul>
+        {list
+          ? list
+              .filter((value) => {
+                console.log(value, "value");
+                if (name === "") {
+                  return value;
+                } else if (
+                  value.name.toLowerCase().includes(name.toLowerCase())
+                ) {
+                  console.log(value, "name");
+                  return value;
+                }
+              })
+              .map((ele, index) => <li> {ele.name}</li>)
+          : ""}
+      </ul>
+
+      <br />
+      <hr />
+      {/* <SearchFilter /> */}
     </div>
   );
 }
